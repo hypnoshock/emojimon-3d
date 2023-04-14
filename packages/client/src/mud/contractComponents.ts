@@ -10,7 +10,7 @@ export function defineContractComponents(world: World) {
       return defineComponent(
         world,
         {
-          value: RecsType.Number,
+          value: RecsType.BigInt,
         },
         {
           metadata: {
@@ -25,8 +25,8 @@ export function defineContractComponents(world: World) {
       return defineComponent(
         world,
         {
-          actionCount: RecsType.Number,
-          monsters: RecsType.StringArray,
+          actionCount: RecsType.BigInt,
+          monsters: RecsType.BigIntArray,
         },
         {
           metadata: {
