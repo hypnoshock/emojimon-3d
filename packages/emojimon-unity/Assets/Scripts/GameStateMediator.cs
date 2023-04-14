@@ -108,7 +108,9 @@ namespace Emojimon
         {
             Debug.Log("GameStateMediator::StartNodeProcess()");
 
-            Debug.LogError("Not implemented");
+            Debug.LogError(
+                "Bridge not yet implemented. Without this there is no state update and therefore nothing will be rendered"
+            );
 
             // _nodePath = EmojimonDevSettings.instance.NodePath;
             // _privateKey = EmojimonDevSettings.instance.PrivateKey;

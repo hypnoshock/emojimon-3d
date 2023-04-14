@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { EntityID, Has, getComponentValueStrict } from "@latticexyz/recs";
 import { useComponentValue, useEntityQuery } from "@latticexyz/react";
 import { twMerge } from "tailwind-merge";
@@ -6,6 +6,13 @@ import { useMUD } from "./MUDContext";
 import { useMapConfig } from "./useMapConfig";
 import { useKeyboardMovement } from "./useKeyboardMovement";
 import { EncounterScreen } from "./EncounterScreen";
+import { Unity, useUnityContext } from "react-unity-webgl";
+
+const unityHackStyle = {
+  position: "absolute",
+  right: 0,
+  bottom: 0,
+};
 
 export const GameBoard = () => {
   const { width, height, terrainValues } = useMapConfig();
@@ -17,6 +24,20 @@ export const GameBoard = () => {
     playerEntity,
     api: { spawn },
   } = useMUD();
+
+  const {
+    unityProvider,
+    sendMessage,
+    addEventListener,
+    removeEventListener,
+    loadingProgression,
+  } = useUnityContext({
+    loaderUrl: `/emojimon-unity/Build/emojimon-unity.loader.js`,
+    dataUrl: `/emojimon-unity/Build/emojimon-unity.data`,
+    frameworkUrl: `/emojimon-unity/Build/emojimon-unity.framework.js`,
+    codeUrl: `/emojimon-unity/Build/emojimon-unity.wasm`,
+  });
+  const [isReady, setIsReady] = useState(false);
 
   useKeyboardMovement();
 
@@ -43,78 +64,82 @@ export const GameBoard = () => {
   }, [encounter]);
 
   return (
-    <div className="inline-grid p-2 bg-lime-500 relative overflow-hidden">
-      {rows.map((y) =>
-        columns.map((x) => {
-          const terrain = terrainValues.find(
-            (t) => t.x === x && t.y === y
-          )?.type;
+    <Fragment>
+      <div className="inline-grid p-2 bg-lime-500 relative overflow-hidden">
+        {rows.map((y) =>
+          columns.map((x) => {
+            const terrain = terrainValues.find(
+              (t) => t.x === x && t.y === y
+            )?.type;
 
-          const hasPlayer = playerPosition?.x === x && playerPosition?.y === y;
-          const otherPlayersHere = otherPlayers.filter(
-            (p) => p.position.x === x && p.position.y === y
-          );
+            const hasPlayer =
+              playerPosition?.x === x && playerPosition?.y === y;
+            const otherPlayersHere = otherPlayers.filter(
+              (p) => p.position.x === x && p.position.y === y
+            );
 
-          return (
-            <div
-              key={`${x},${y}`}
-              className={twMerge(
-                "w-8 h-8 flex items-center justify-center",
-                canSpawn ? "cursor-pointer hover:ring" : null
-              )}
-              style={{
-                gridColumn: x + 1,
-                gridRow: y + 1,
-              }}
-              onClick={async (event) => {
-                event.preventDefault();
-                if (canSpawn) {
-                  await spawn(x, y);
-                }
-              }}
-            >
-              {hasPlayer && encounter ? (
-                <div
-                  className="absolute z-10 animate-battle"
-                  style={{
-                    boxShadow: "0 0 0 100vmax black",
-                  }}
-                  onAnimationEnd={() => {
-                    setShowEncounter(true);
-                  }}
-                ></div>
-              ) : null}
-              <div className="flex flex-wrap gap-1 items-center justify-center relative">
-                {terrain ? (
-                  <div className="absolute inset-0 flex items-center justify-center text-3xl pointer-events-none">
-                    {terrain.emoji}
-                  </div>
+            return (
+              <div
+                key={`${x},${y}`}
+                className={twMerge(
+                  "w-8 h-8 flex items-center justify-center",
+                  canSpawn ? "cursor-pointer hover:ring" : null
+                )}
+                style={{
+                  gridColumn: x + 1,
+                  gridRow: y + 1,
+                }}
+                onClick={async (event) => {
+                  event.preventDefault();
+                  if (canSpawn) {
+                    await spawn(x, y);
+                  }
+                }}
+              >
+                {hasPlayer && encounter ? (
+                  <div
+                    className="absolute z-10 animate-battle"
+                    style={{
+                      boxShadow: "0 0 0 100vmax black",
+                    }}
+                    onAnimationEnd={() => {
+                      setShowEncounter(true);
+                    }}
+                  ></div>
                 ) : null}
-                <div className="relative">
-                  {hasPlayer ? <>🤠</> : null}
-                  {otherPlayersHere.map((p) => (
-                    <span key={p.entity}>🥸</span>
-                  ))}
+                <div className="flex flex-wrap gap-1 items-center justify-center relative">
+                  {terrain ? (
+                    <div className="absolute inset-0 flex items-center justify-center text-3xl pointer-events-none">
+                      {terrain.emoji}
+                    </div>
+                  ) : null}
+                  <div className="relative">
+                    {hasPlayer ? <>🤠</> : null}
+                    {otherPlayersHere.map((p) => (
+                      <span key={p.entity}>🥸</span>
+                    ))}
+                  </div>
                 </div>
               </div>
-            </div>
-          );
-        })
-      )}
+            );
+          })
+        )}
 
-      {encounter && showEncounter ? (
-        <div
-          className="relative z-10 -m-2 bg-black text-white flex items-center justify-center"
-          style={{
-            gridColumnStart: 1,
-            gridColumnEnd: width + 1,
-            gridRowStart: 1,
-            gridRowEnd: height + 1,
-          }}
-        >
-          <EncounterScreen monsterIds={encounter.monsters} />
-        </div>
-      ) : null}
-    </div>
+        {encounter && showEncounter ? (
+          <div
+            className="relative z-10 -m-2 bg-black text-white flex items-center justify-center"
+            style={{
+              gridColumnStart: 1,
+              gridColumnEnd: width + 1,
+              gridRowStart: 1,
+              gridRowEnd: height + 1,
+            }}
+          >
+            <EncounterScreen monsterIds={encounter.monsters} />
+          </div>
+        ) : null}
+      </div>
+      <Unity unityProvider={unityProvider} style={unityHackStyle} />
+    </Fragment>
   );
 };
