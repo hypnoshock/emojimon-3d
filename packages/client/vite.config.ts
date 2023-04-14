@@ -22,6 +22,7 @@ export default defineConfig({
     },
     target: "es2022",
   },
+  publicDir: "public",
   define: {
     "process.env": {},
   },
