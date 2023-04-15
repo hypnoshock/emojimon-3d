@@ -19,15 +19,6 @@ public class PlayerController : MonoBehaviour
         targetPos = new Vector3(gs.PlayerPosition.X, 0, -gs.PlayerPosition.Y);
     }
 
-    private void OnStateUpdateOld(GameState gs)
-    {
-        var pos = gs.PlayerPosition;
-        this.transform.SetLocalPositionAndRotation(
-            new Vector3(pos.X, 0, -pos.Y),
-            Quaternion.identity
-        );
-    }
-
     private void Update()
     {
         this.transform.localPosition = Vector3.Lerp(
