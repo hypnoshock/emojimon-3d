@@ -112,3 +112,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   RockPrefab: {fileID: 6381607935986139962, guid: 4f8bf56001b5c4664811a799e0a20901, type: 3}
+  TreePrefab: {fileID: 5638677844689893269, guid: e5007ef0071f147a792a7bdb3bf32c22, type: 3}
