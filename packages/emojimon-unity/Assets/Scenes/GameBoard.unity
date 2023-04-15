@@ -123,6 +123,31 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &191143303 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8224718917009497134, guid: 8989e230029a84439bcf581ef993d19e, type: 3}
+  m_PrefabInstance: {fileID: 8256215138633251128}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &191143309
+Animator:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 191143303}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 6f5bc0f801ab1415e97d80faa47b7550, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &289194529
 GameObject:
   m_ObjectHideFlags: 0
@@ -345,7 +370,7 @@ Camera:
   m_GameObject: {fileID: 963194225}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 1
+  m_ClearFlags: 2
   m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
@@ -560,6 +585,10 @@ PrefabInstance:
     - target: {fileID: 8256215137183552338, guid: 8989e230029a84439bcf581ef993d19e, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8256215137183552339, guid: 8989e230029a84439bcf581ef993d19e, type: 3}
+      propertyPath: damping
+      value: 1.5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8989e230029a84439bcf581ef993d19e, type: 3}
