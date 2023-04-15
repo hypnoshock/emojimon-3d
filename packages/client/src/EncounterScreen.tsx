@@ -61,7 +61,7 @@ export const EncounterScreen = ({ monsterIds }: Props) => {
       )}
     >
       <div className="text-8xl animate-bounce">{monsterType.emoji}</div>
-      <div>A wild {monsterType.name} appears!</div>
+      <div className="bg-black p-2">A wild {monsterType.name} appears!</div>
 
       <div className="flex gap-2">
         <button

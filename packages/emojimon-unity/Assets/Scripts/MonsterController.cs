@@ -5,14 +5,22 @@ using UnityEngine;
 public class MonsterController : MonoBehaviour
 {
     [Serializable]
-    public struct MonsterInfo 
+    public struct MonsterInfo
     {
         public int ID;
         public GameObject Model;
     }
 
-    [SerializeField] List<MonsterInfo> Monsters;
-    [SerializeField] PlayerController Player;
+    [SerializeField]
+    List<MonsterInfo> Monsters;
+
+    [SerializeField]
+    PlayerController Player;
+
+    [SerializeField]
+    float animTime = 1;
+    private float _elapsedTime;
+
     protected void Start()
     {
         GameStateMediator.Instance.EventStateUpdated += OnStateUpdate;
@@ -22,6 +30,7 @@ public class MonsterController : MonoBehaviour
     {
         if (gs.HasEncounter)
         {
+            _elapsedTime = 0;
             transform.position = Player.transform.position;
             int id = gs.MonsterType;
             foreach (var info in Monsters)
@@ -43,5 +52,14 @@ public class MonsterController : MonoBehaviour
                 info.Model.SetActive(false);
             }
         }
+    }
+
+    protected void Update()
+    {
+        _elapsedTime += Time.deltaTime;
+        var t = Mathf.Clamp(_elapsedTime / animTime, 0, 1);
+        var s = Easing.easeOutElastic(t);
+
+        transform.localScale = new Vector3(s, s, s);
     }
 }
