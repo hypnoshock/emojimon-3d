@@ -156,21 +156,21 @@ export const GameBoard = () => {
             );
           })
         )}
-
-        {encounter && showEncounter ? (
-          <div
-            className="relative z-10 -m-2 bg-black text-white flex items-center justify-center"
-            style={{
-              gridColumnStart: 1,
-              gridColumnEnd: width + 1,
-              gridRowStart: 1,
-              gridRowEnd: height + 1,
-            }}
-          >
-            <EncounterScreen monsterIds={encounter.monsters} />
-          </div>
-        ) : null}
       </div>
+
+      {encounter && showEncounter ? (
+        <div
+          className="relative z-10 -m-2 text-white flex items-center justify-center"
+          style={{
+            gridColumnStart: 1,
+            gridColumnEnd: width + 1,
+            gridRowStart: 1,
+            gridRowEnd: height + 1,
+          }}
+        >
+          <EncounterScreen monsterIds={encounter.monsters} />
+        </div>
+      ) : null}
     </Fragment>
   );
 };

@@ -16,7 +16,7 @@ export const App = () => {
   });
 
   return (
-    <div className="w-screen h-screen flex items-center justify-center">
+    <div className="w-screen h-screen">
       {loadingState.state !== SyncState.LIVE ? (
         <div>
           {loadingState.msg} ({Math.floor(loadingState.percentage)}%)
