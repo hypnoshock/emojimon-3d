@@ -58,6 +58,56 @@ namespace Emojimon
             NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore
         )]
         public bool HasEncounter;
+
+        [Newtonsoft.Json.JsonProperty(
+            "map",
+            Required = Newtonsoft.Json.Required.DisallowNull,
+            NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore
+        )]
+        public Map Map;
+    }
+
+    // "map":{"width":20,"height":20,"terrainValues":[{"x":0,"y":0,"value":0,"type":null}]
+    public class Map
+    {
+        [Newtonsoft.Json.JsonProperty(
+            "width",
+            Required = Newtonsoft.Json.Required.DisallowNull,
+            NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore
+        )]
+        public int Width;
+
+        [Newtonsoft.Json.JsonProperty(
+            "height",
+            Required = Newtonsoft.Json.Required.DisallowNull,
+            NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore
+        )]
+        public int Height;
+
+        [Newtonsoft.Json.JsonProperty(
+            "terrainValues",
+            Required = Newtonsoft.Json.Required.DisallowNull,
+            NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore
+        )]
+        public List<TerrainValue> TerrainValues;
+    }
+
+    public class TerrainValue
+    {
+        [Newtonsoft.Json.JsonProperty(
+            "x",
+            Required = Newtonsoft.Json.Required.DisallowNull,
+            NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore
+        )]
+        public int X;
+
+        [Newtonsoft.Json.JsonProperty(
+            "y",
+            Required = Newtonsoft.Json.Required.DisallowNull,
+            NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore
+        )]
+        public int Y;
+        public int Value;
     }
 
     public class Encounter
@@ -184,6 +234,15 @@ namespace Emojimon
             Debug.Log(
                 $"Unity: GameStateMediator:: OtherPlayers.Count: {gameState.OtherPlayers.Count}"
             );
+
+            // Forgot how to do LINQs equivalent to reduce
+            var tileVals = "";
+            for (var i = 0; i < gameState.Map.TerrainValues.Count; i++)
+            {
+                var tv = gameState.Map.TerrainValues[i];
+                tileVals += $"{tv.Value},";
+            }
+            Debug.Log($"Unity: GameStateMediator:: tileVals: ${tileVals}");
 
             for (var i = 0; i < gameState.OtherPlayers.Count; i++)
             {

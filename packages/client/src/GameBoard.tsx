@@ -69,6 +69,7 @@ export const GameBoard = () => {
     otherPlayers,
     encounter,
     hasEncounter: encounter != undefined,
+    map: { width, height, terrainValues },
   };
 
   const gameStateJson = JSON.stringify(gameState, (_, v) => {
@@ -78,7 +79,7 @@ export const GameBoard = () => {
   // TODO: Debounce this?
   sendMessage("GameStateMediator", "OnState", gameStateJson);
 
-  console.log(`GameState:`, gameState, "JSON:", gameStateJson);
+  // console.log(`GameState:`, gameState, "JSON:", gameStateJson);
 
   return (
     <Fragment>
