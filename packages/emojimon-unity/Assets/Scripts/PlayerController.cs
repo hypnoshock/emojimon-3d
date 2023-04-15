@@ -12,7 +12,7 @@ public class PlayerController : MonoBehaviour
     {
         var pos = gs.PlayerPosition;
         this.transform.SetLocalPositionAndRotation(
-            new Vector3(pos.X, this.transform.position.y, -pos.Y),
+            new Vector3(pos.X, 0, -pos.Y),
             Quaternion.identity
         );
     }
