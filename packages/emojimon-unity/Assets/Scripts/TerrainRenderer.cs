@@ -6,10 +6,13 @@ class TerrainObject
     public TerrainValue TerrainValue;
     public GameObject Model;
 
+    public Renderer Rend;
+
     public TerrainObject(TerrainValue terrainValue, GameObject model)
     {
         TerrainValue = terrainValue;
         Model = model;
+        Rend = model.GetComponentInChildren<Renderer>();
     }
 }
 
@@ -17,6 +20,12 @@ public class TerrainRenderer : MonoBehaviour
 {
     public GameObject RockPrefab;
     public GameObject TreePrefab;
+
+    private float fromAlpha = 0;
+    private float targetAlpha = 0;
+    private float currrentAlpha = 0;
+    public float lerpTimeSecs = 1f;
+    public float elapsedTime = 0;
 
     private Dictionary<Position, TerrainObject> _terrainObjs;
 
@@ -27,9 +36,32 @@ public class TerrainRenderer : MonoBehaviour
         GameStateMediator.Instance.EventStateUpdated += OnStateUpdate;
     }
 
+    protected void Update()
+    {
+        elapsedTime += Time.deltaTime;
+        var t = elapsedTime / lerpTimeSecs;
+
+        currrentAlpha = Mathf.Lerp(fromAlpha, targetAlpha, t);
+
+        SetAlpha(currrentAlpha);
+    }
+
     private void OnStateUpdate(GameState gs)
     {
         UpdateTiles(gs.Map);
+
+        if (gs.HasEncounter && targetAlpha != 0)
+        {
+            targetAlpha = 0;
+            fromAlpha = 1;
+            elapsedTime = 0;
+        }
+        else if (targetAlpha != 1)
+        {
+            targetAlpha = 1;
+            fromAlpha = 0;
+            elapsedTime = 0;
+        }
     }
 
     private void UpdateTiles(Map map)
@@ -65,6 +97,16 @@ public class TerrainRenderer : MonoBehaviour
 
             var to = new TerrainObject(tv, model);
             _terrainObjs[pos] = to;
+        }
+    }
+
+    private void SetAlpha(float alpha)
+    {
+        foreach (var kvp in _terrainObjs)
+        {
+            Color color = kvp.Value.Rend.material.color;
+            color.a = alpha;
+            kvp.Value.Rend.material.color = color;
         }
     }
 
