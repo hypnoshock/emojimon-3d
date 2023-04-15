@@ -56,7 +56,7 @@ export const EncounterScreen = ({ monsterIds }: Props) => {
   return (
     <div
       className={twMerge(
-        "w-screen h-screen flex flex-col gap-10 items-center justify-center text-white transition-opacity duration-1000",
+        "w-screen h-screen flex flex-col gap-10 items-center justify-end text-white transition-opacity duration-1000",
         appear ? "opacity-100" : "opacity-0"
       )}
     >
