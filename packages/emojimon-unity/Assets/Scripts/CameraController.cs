@@ -4,8 +4,9 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
-    [SerializeField] Transform Player;
-    
+    [SerializeField]
+    Transform Player;
+
     void Update()
     {
         transform.position = Player.position;
