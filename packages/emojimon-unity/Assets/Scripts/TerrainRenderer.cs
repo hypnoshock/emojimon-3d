@@ -50,16 +50,16 @@ public class TerrainRenderer : MonoBehaviour
     {
         UpdateTiles(gs.Map);
 
-        if (gs.HasEncounter && targetAlpha != 0)
+        if (gs.HasEncounter)
         {
             targetAlpha = 0;
-            fromAlpha = 1;
+            fromAlpha = currrentAlpha;
             elapsedTime = 0;
         }
-        else if (targetAlpha != 1)
+        else
         {
             targetAlpha = 1;
-            fromAlpha = 0;
+            fromAlpha = currrentAlpha;
             elapsedTime = 0;
         }
     }

@@ -17,6 +17,15 @@ public class PlayerController : MonoBehaviour
     private void OnStateUpdate(GameState gs)
     {
         targetPos = new Vector3(gs.PlayerPosition.X, 0, -gs.PlayerPosition.Y);
+
+        if (gs.HasEncounter)
+        {
+            animator.SetBool("encounter", true);
+        }
+        else
+        {
+            animator.SetBool("encounter", false);
+        }
     }
 
     private void Update()
