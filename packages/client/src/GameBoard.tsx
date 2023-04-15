@@ -63,6 +63,22 @@ export const GameBoard = () => {
     }
   }, [encounter]);
 
+  const gameState = {
+    playerPosition,
+    canSpawn,
+    encounter,
+    otherPlayers,
+  };
+
+  const gameStateJson = JSON.stringify(gameState, (_, v) => {
+    return typeof v === "bigint" ? v.toString() : v;
+  });
+
+  // TODO: Debounce this?
+  sendMessage("GameStateMediator", "OnState", gameStateJson);
+
+  // console.log(`GameState:`, gameState, "JSON:", gameStateJson);
+
   return (
     <Fragment>
       <div className="inline-grid p-2 bg-lime-500 relative overflow-hidden">

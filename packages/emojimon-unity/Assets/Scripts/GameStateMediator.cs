@@ -19,16 +19,69 @@ namespace Emojimon
         public object[] args;
     }
 
-    // TODO: The json schema has this structure defined, find a way to export that structure instead of definiing it manually here
+    // -- HAND CRANKED GAME STATE SCHEMA -- //
+
+    // TODO: Export the state as json schema and code gen this
+    // JSON: {"playerPosition":{"x":7,"y":11},"canSpawn":false,"otherPlayers":[{"entity":140,"position":{"x":5,"y":5}}]}
     public class GameState
     {
         [Newtonsoft.Json.JsonProperty(
-            "playerPos",
+            "playerPosition",
             Required = Newtonsoft.Json.Required.DisallowNull,
             NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore
         )]
-        public Vector3Int PlayerPos { get; set; }
+        public Position PlayerPosition { get; set; }
+
+        [Newtonsoft.Json.JsonProperty(
+            "canSpawn",
+            Required = Newtonsoft.Json.Required.DisallowNull,
+            NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore
+        )]
+        public bool CanSpawn { get; set; }
+
+        [Newtonsoft.Json.JsonProperty(
+            "otherPlayers",
+            Required = Newtonsoft.Json.Required.DisallowNull,
+            NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore
+        )]
+        public List<OtherPlayer> OtherPlayers;
     }
+
+    public struct Position
+    {
+        [Newtonsoft.Json.JsonProperty(
+            "x",
+            Required = Newtonsoft.Json.Required.DisallowNull,
+            NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore
+        )]
+        public int X;
+
+        [Newtonsoft.Json.JsonProperty(
+            "y",
+            Required = Newtonsoft.Json.Required.DisallowNull,
+            NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore
+        )]
+        public int Y;
+    }
+
+    public struct OtherPlayer
+    {
+        [Newtonsoft.Json.JsonProperty(
+            "entity",
+            Required = Newtonsoft.Json.Required.DisallowNull,
+            NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore
+        )]
+        public int Entity;
+
+        [Newtonsoft.Json.JsonProperty(
+            "position",
+            Required = Newtonsoft.Json.Required.DisallowNull,
+            NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore
+        )]
+        public Position Position;
+    }
+
+    // --------------------------- //
 
     public class GameStateMediator : MonoBehaviour
     {
@@ -87,6 +140,22 @@ namespace Emojimon
             gameState = state;
             // _account = state.PlayerAddr as string;
             _hasStateUpdated = true;
+
+            Debug.Log("Unity: GameStateMediator::UpdateState()");
+            Debug.Log(
+                $"Unity: GameStateMediator:: playerPosition: {gameState.PlayerPosition.X}, {gameState.PlayerPosition.Y}"
+            );
+            Debug.Log($"Unity: GameStateMediator:: CanSpawn: {gameState.CanSpawn}");
+            Debug.Log(
+                $"Unity: GameStateMediator:: OtherPlayers.Count: {gameState.OtherPlayers.Count}"
+            );
+
+            for (var i = 0; i < gameState.OtherPlayers.Count; i++)
+            {
+                var pos = gameState.OtherPlayers[i].Position;
+                var entity = gameState.OtherPlayers[i].Entity;
+                Debug.Log($"Unity: GameStateMediator:: entity: {entity} pos: {pos.X}, {pos.Y}");
+            }
         }
 
 #if UNITY_EDITOR
