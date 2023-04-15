@@ -10,8 +10,18 @@ import { Unity, useUnityContext } from "react-unity-webgl";
 
 const unityHackStyle = {
   position: "absolute",
-  right: 0,
-  bottom: 0,
+  top: 0,
+  left: 0,
+  width: "100vw",
+  height: "100vh",
+};
+
+const minimapHackStyle = {
+  position: "absolute",
+  bottom: "10px",
+  right: "10px",
+  transform: "scale(0.3)",
+  transformOrigin: "bottom right",
 };
 
 export const GameBoard = () => {
@@ -83,7 +93,11 @@ export const GameBoard = () => {
 
   return (
     <Fragment>
-      <div className="inline-grid p-2 bg-lime-500 relative overflow-hidden">
+      <Unity unityProvider={unityProvider} style={unityHackStyle} />
+      <div
+        className="inline-grid p-2 bg-lime-500 relative overflow-hidden"
+        style={minimapHackStyle}
+      >
         {rows.map((y) =>
           columns.map((x) => {
             const terrain = terrainValues.find(
@@ -157,7 +171,6 @@ export const GameBoard = () => {
           </div>
         ) : null}
       </div>
-      <Unity unityProvider={unityProvider} style={unityHackStyle} />
     </Fragment>
   );
 };
