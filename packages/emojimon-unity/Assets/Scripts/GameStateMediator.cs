@@ -118,6 +118,21 @@ public class GameStateMediator : MonoBehaviour
             gameState.HasEncounter = false;
             UpdateState(gameState);
         }
+
+        // other player
+        if (Input.GetKeyDown(KeyCode.O)) {
+            gameState.OtherPlayers.Add(
+                new OtherPlayer() 
+                {
+                    Entity = Time.frameCount,
+                    Position = new Position() 
+                    { 
+                        X = UnityEngine.Random.Range(0,20), 
+                        Y = UnityEngine.Random.Range(0,20) 
+                    },
+                });
+            UpdateState(gameState);
+        }
     }
 
     private void UpdateState(GameState state)
@@ -151,7 +166,7 @@ public class GameStateMediator : MonoBehaviour
         {
             var pos = gameState.OtherPlayers[i].Position;
             var entity = gameState.OtherPlayers[i].Entity;
-            Debug.Log($"Unity: GameStateMediator:: entity: {entity} pos: {pos.X}, {pos.Y}");
+            Debug.Log($"Unity: GameStateMediator:: OtherPlayer: entity: {entity} pos: {pos.X}, {pos.Y}");
         }
 
         Debug.Log($"Unity: GameStateMediator:: HasEncounter: {gameState.HasEncounter}");
