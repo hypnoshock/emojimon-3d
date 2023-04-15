@@ -11,15 +11,15 @@ type MonsterConfig = {
 
 export const monsterTypes: Record<MonsterType, MonsterConfig> = {
   [MonsterType.Eagle]: {
-    name: "Eagle",
-    emoji: "🦅",
+    name: "Panda",
+    emoji: "🐼",
   },
   [MonsterType.Rat]: {
-    name: "Rat",
-    emoji: "🐀",
+    name: "Lion",
+    emoji: "🦁",
   },
   [MonsterType.Caterpillar]: {
-    name: "Caterpillar",
-    emoji: "🐛",
+    name: "Pig",
+    emoji: "🐷",
   },
 };

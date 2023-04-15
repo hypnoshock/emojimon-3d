@@ -57,6 +57,9 @@ public class GameStateMediator : MonoBehaviour
 
     protected void Update()
     {
+        #if UNITY_EDITOR
+        DebugUpdate();
+        #endif
         // state events get dispatched in the update loop so that the event happens in the main thread which is required
         // by anything that renders anything as a side effect of the state update
         if (_hasStateUpdated)
@@ -66,6 +69,54 @@ public class GameStateMediator : MonoBehaviour
             {
                 EventStateUpdated.Invoke(gameState);
             }
+        }
+    }
+
+    // Some dummy state change on keys in teh absence of Bridge being implemented
+    private void DebugUpdate()
+    {
+        // modify state directly bur still call UpdateState to trigger event
+
+        Position move = new Position() { X=0, Y=0 };
+        if (Input.GetKeyDown(KeyCode.LeftArrow)) {
+            move.X = -1;
+        }
+        else if (Input.GetKeyDown(KeyCode.RightArrow)) {
+            move.X = 1;
+        }
+        else if (Input.GetKeyDown(KeyCode.UpArrow)) {
+            move.Y = -1;
+        }
+        else if (Input.GetKeyDown(KeyCode.DownArrow)) {
+            move.Y = 1;
+        }
+
+        if (move.X !=0 || move.Y != 0)
+        {
+            Position pos = gameState.PlayerPosition;
+            pos.X += move.X;
+            pos.Y += move.Y;
+            gameState.PlayerPosition = pos;
+            UpdateState(gameState);
+        }
+
+        // encounter
+        if (Input.GetKeyDown(KeyCode.E)) {
+            gameState.HasEncounter = true;
+            gameState.MonsterType = UnityEngine.Random.Range(1,4);
+            var encounter = new Encounter() 
+            {
+                Monsters = new List<string>() {"DUMMY"},
+                ActionCount = 1
+            };
+            gameState.Encounter = encounter;
+            UpdateState(gameState);
+        }
+
+        // runaway
+        if (Input.GetKeyDown(KeyCode.R)) {
+            gameState.HasEncounter = false;
+            UpdateState(gameState);
         }
     }
 
@@ -115,6 +166,8 @@ public class GameStateMediator : MonoBehaviour
                 var monster = encounter.Monsters[i];
                 Debug.Log($"Unity: GameStateMediator:: Monster: {monster}");
             }
+
+            Debug.Log($"Unity: GameStateMediator:: monsterType: {gameState.MonsterType}");
         }
     }
 

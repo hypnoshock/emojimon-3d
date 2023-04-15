@@ -1,5 +1,5 @@
 import { Fragment, useEffect, useState } from "react";
-import { EntityID, Has, getComponentValueStrict } from "@latticexyz/recs";
+import { EntityID, Has, getComponentValueStrict, getComponentValue } from "@latticexyz/recs";
 import { useComponentValue, useEntityQuery } from "@latticexyz/react";
 import { twMerge } from "tailwind-merge";
 import { useMUD } from "./MUDContext";
@@ -7,6 +7,8 @@ import { useMapConfig } from "./useMapConfig";
 import { useKeyboardMovement } from "./useKeyboardMovement";
 import { EncounterScreen } from "./EncounterScreen";
 import { Unity, useUnityContext } from "react-unity-webgl";
+import { isDefined } from "@latticexyz/utils";
+import { MonsterType, monsterTypes } from "./monsterTypes";
 
 const unityHackStyle = {
   position: "absolute",
@@ -30,7 +32,8 @@ export const GameBoard = () => {
   const columns = new Array(height).fill(0).map((_, i) => i);
 
   const {
-    components: { Encounter, Position, Player },
+    world,
+    components: { Encounter, Position, Player, Monster },
     playerEntity,
     api: { spawn },
   } = useMUD();
@@ -73,6 +76,19 @@ export const GameBoard = () => {
     }
   }, [encounter]);
 
+  let monsterType;
+  if (encounter && showEncounter) {
+    const monsterStrings: string[] = encounter.monsters.map(bigIntElem => bigIntElem.toString(16));
+    const monster = monsterStrings.
+      map((m) => world.entityToIndex.get(m as EntityID))
+      .filter(isDefined)[0];
+
+    const compVal = getComponentValue(Monster, monster);
+     monsterType = compVal? compVal.value : 0;
+  }
+
+  
+
   const gameState = {
     playerPosition,
     canSpawn,
@@ -80,6 +96,7 @@ export const GameBoard = () => {
     encounter,
     hasEncounter: encounter != undefined,
     map: { width, height, terrainValues },
+    monsterType
   };
 
   const gameStateJson = JSON.stringify(gameState, (_, v) => {

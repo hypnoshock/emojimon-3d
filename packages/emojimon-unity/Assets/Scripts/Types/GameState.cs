@@ -43,6 +43,12 @@ public class GameState
         NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore
     )]
     public Map Map;
+
+    [Newtonsoft.Json.JsonProperty(
+        "monsterType",
+        NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore
+    )]
+    public int MonsterType;
 }
 
 // "map":{"width":20,"height":20,"terrainValues":[{"x":0,"y":0,"value":0,"type":null}]
