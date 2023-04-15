@@ -79,7 +79,7 @@ export const GameBoard = () => {
   // TODO: Debounce this?
   sendMessage("GameStateMediator", "OnState", gameStateJson);
 
-  // console.log(`GameState:`, gameState, "JSON:", gameStateJson);
+  console.log(`GameState:`, gameState, "JSON:", gameStateJson);
 
   return (
     <Fragment>
