@@ -41,7 +41,7 @@ public class TerrainRenderer : MonoBehaviour
         elapsedTime += Time.deltaTime;
         var t = elapsedTime / lerpTimeSecs;
 
-        currrentAlpha = Mathf.Lerp(fromAlpha, targetAlpha, t);
+        currrentAlpha = Mathf.Clamp(Mathf.Lerp(fromAlpha, targetAlpha, t), 0, 1);
 
         SetAlpha(currrentAlpha);
     }
@@ -52,12 +52,14 @@ public class TerrainRenderer : MonoBehaviour
 
         if (gs.HasEncounter)
         {
+            Debug.Log($"TerrainRenderer:: HasEncounter: {gs.HasEncounter} setting target to 0");
             targetAlpha = 0;
             fromAlpha = currrentAlpha;
             elapsedTime = 0;
         }
         else
         {
+            Debug.Log($"TerrainRenderer:: HasEncounter: {gs.HasEncounter} setting target to 1");
             targetAlpha = 1;
             fromAlpha = currrentAlpha;
             elapsedTime = 0;
