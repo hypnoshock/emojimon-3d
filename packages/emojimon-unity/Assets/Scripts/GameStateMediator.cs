@@ -22,7 +22,7 @@ namespace Emojimon
     // -- HAND CRANKED GAME STATE SCHEMA -- //
 
     // TODO: Export the state as json schema and code gen this
-    // JSON: {"playerPosition":{"x":7,"y":11},"canSpawn":false,"otherPlayers":[{"entity":140,"position":{"x":5,"y":5}}]}
+    // JSON: {"playerPosition":{"x":9,"y":11},"canSpawn":false,"otherPlayers":[{"entity":140,"position":{"x":5,"y":5}}],"encounter":{"0":"2","actionCount":"2","monsters":["0xc8e249ee5364aa9d18cccb5cf6aaaeef1d9519312e37956146914625a2581951"]},"hasEncounter":true}
     public class GameState
     {
         [Newtonsoft.Json.JsonProperty(
@@ -45,6 +45,36 @@ namespace Emojimon
             NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore
         )]
         public List<OtherPlayer> OtherPlayers;
+
+        [Newtonsoft.Json.JsonProperty(
+            "encounter",
+            NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore
+        )]
+        public Encounter Encounter;
+
+        [Newtonsoft.Json.JsonProperty(
+            "hasEncounter",
+            Required = Newtonsoft.Json.Required.DisallowNull,
+            NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore
+        )]
+        public bool HasEncounter;
+    }
+
+    public class Encounter
+    {
+        [Newtonsoft.Json.JsonProperty(
+            "monsters",
+            Required = Newtonsoft.Json.Required.DisallowNull,
+            NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore
+        )]
+        public List<string> Monsters;
+
+        [Newtonsoft.Json.JsonProperty(
+            "actionCount",
+            Required = Newtonsoft.Json.Required.DisallowNull,
+            NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore
+        )]
+        public int ActionCount;
     }
 
     public struct Position
@@ -141,6 +171,11 @@ namespace Emojimon
             // _account = state.PlayerAddr as string;
             _hasStateUpdated = true;
 
+            LogState(state);
+        }
+
+        private void LogState(GameState gameState)
+        {
             Debug.Log("Unity: GameStateMediator::UpdateState()");
             Debug.Log(
                 $"Unity: GameStateMediator:: playerPosition: {gameState.PlayerPosition.X}, {gameState.PlayerPosition.Y}"
@@ -155,6 +190,22 @@ namespace Emojimon
                 var pos = gameState.OtherPlayers[i].Position;
                 var entity = gameState.OtherPlayers[i].Entity;
                 Debug.Log($"Unity: GameStateMediator:: entity: {entity} pos: {pos.X}, {pos.Y}");
+            }
+
+            Debug.Log($"Unity: GameStateMediator:: HasEncounter: {gameState.HasEncounter}");
+
+            if (gameState.HasEncounter)
+            {
+                var encounter = gameState.Encounter;
+                Debug.Log(
+                    $"Unity: GameStateMediator:: encounter.ActionCount: {encounter.ActionCount}"
+                );
+
+                for (var i = 0; i < encounter.Monsters.Count; i++)
+                {
+                    var monster = encounter.Monsters[i];
+                    Debug.Log($"Unity: GameStateMediator:: Monster: {monster}");
+                }
             }
         }
 
